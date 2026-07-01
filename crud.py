@@ -1,38 +1,24 @@
-# ============================================
-# crud.py
-# CRUD Operations for Risk Library
-# ============================================
 
 from database import collection
 
 
-# ---------------------------------------------------
-# Create Risk
-# ---------------------------------------------------
 def create_risk(risk):
 
-    # Convert Pydantic object into dictionary
+
     data = risk.model_dump()
 
-    # Insert into MongoDB
+
     collection.insert_one(data)
 
     return {
         "message": "Risk Added Successfully"
     }
-
-
-# ---------------------------------------------------
-# Get All Risks
-# ---------------------------------------------------
 def get_all_risks():
 
     risks = []
 
-    # Read every document
     for risk in collection.find():
 
-        # Convert ObjectId into string
         risk["_id"] = str(risk["_id"])
 
         risks.append(risk)
@@ -40,9 +26,6 @@ def get_all_risks():
     return risks
 
 
-# ---------------------------------------------------
-# Get Risk By ID
-# ---------------------------------------------------
 def get_risk_by_id(risk_id):
 
     risk = collection.find_one({"id": risk_id})
@@ -57,10 +40,6 @@ def get_risk_by_id(risk_id):
         "message": "Risk Not Found"
     }
 
-
-# ---------------------------------------------------
-# Update Risk
-# ---------------------------------------------------
 def update_risk(risk_id, risk):
 
     result = collection.update_one(
@@ -79,10 +58,6 @@ def update_risk(risk_id, risk):
         "message": "Risk Not Found"
     }
 
-
-# ---------------------------------------------------
-# Delete Risk
-# ---------------------------------------------------
 def delete_risk(risk_id):
 
     result = collection.delete_one(
@@ -100,10 +75,6 @@ def delete_risk(risk_id):
         "message": "Risk Not Found"
     }
 
-
-# ---------------------------------------------------
-# Search Risks
-# ---------------------------------------------------
 def search_risks(archetype, severity):
 
     risks = []
